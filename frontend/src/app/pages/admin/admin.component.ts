@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 
 @Component({
@@ -28,7 +28,7 @@ import { ApiService } from '../../core/services/api.service';
         </button>
       </div>
 
-      <!-- Users Tab -->
+      <!-- USERS -->
       <div *ngIf="activeTab === 'users'" class="tab-content">
         <div class="table-wrapper">
           <table class="admin-table">
@@ -58,67 +58,86 @@ import { ApiService } from '../../core/services/api.service';
         </div>
       </div>
 
-      <!-- Meals Tab -->
+      <!-- MEALS -->
       <div *ngIf="activeTab === 'meals'" class="tab-content">
-        <button class="btn btn-primary btn-sm" (click)="showMealForm = !showMealForm" style="margin-bottom: 20px">
+        <button class="btn btn-primary btn-sm" (click)="toggleMealForm()">
           <span class="material-icons">add</span> {{ showMealForm ? 'Cancel' : 'Add Meal Plan' }}
         </button>
 
         <div class="form-card card" *ngIf="showMealForm">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Meal Type</label>
-              <select class="form-control" [(ngModel)]="mealForm.mealType" name="mealType">
-                <option value="BREAKFAST">Breakfast</option>
-                <option value="LUNCH">Lunch</option>
-                <option value="SNACK">Snack</option>
-                <option value="DINNER">Dinner</option>
-              </select>
+          <form #mealFormRef="ngForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Meal Type</label>
+                <select class="form-control" [(ngModel)]="mealForm.mealType" name="mealType" required>
+                  <option value="BREAKFAST">Breakfast</option>
+                  <option value="LUNCH">Lunch</option>
+                  <option value="SNACK">Snack</option>
+                  <option value="DINNER">Dinner</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Food Item</label>
+                <input class="form-control" [(ngModel)]="mealForm.foodItem" name="foodItem"
+                       required pattern="^[a-zA-Z0-9 ]+$">
+              </div>
+
+              <div class="form-group">
+                <label>Calories</label>
+                <input type="number" class="form-control" [(ngModel)]="mealForm.calories"
+                       name="calories" required min="1">
+              </div>
+
+              <div class="form-group">
+                <label>Proteins (g)</label>
+                <input type="number" class="form-control" [(ngModel)]="mealForm.proteins"
+                       name="proteins" required min="0">
+              </div>
+
+              <div class="form-group">
+                <label>Carbs (g)</label>
+                <input type="number" class="form-control" [(ngModel)]="mealForm.carbs"
+                       name="carbs" required min="0">
+              </div>
+
+              <div class="form-group">
+                <label>Fats (g)</label>
+                <input type="number" class="form-control" [(ngModel)]="mealForm.fats"
+                       name="fats" required min="0">
+              </div>
+
+              <div class="form-group">
+                <label>Diet Preference</label>
+                <select class="form-control" [(ngModel)]="mealForm.dietPreference" name="dietPreference" required>
+                  <option value="VEG">Veg</option>
+                  <option value="NON_VEG">Non-Veg</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Goal</label>
+                <select class="form-control" [(ngModel)]="mealForm.goal" name="goal" required>
+                  <option value="OVERALL_HEALTH">Overall Health</option>
+                  <option value="MUSCULAR_STRENGTH">Muscular Strength</option>
+                  <option value="WEIGHT_LOSS">Weight Loss</option>
+                  <option value="DIABETIC_BP_CONTROL">Diabetic/BP Control</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Day Number</label>
+                <input type="number" class="form-control" [(ngModel)]="mealForm.dayNumber"
+                       name="dayNumber" required min="1">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Food Item</label>
-              <input class="form-control" [(ngModel)]="mealForm.foodItem" name="foodItem" placeholder="e.g. Grilled Chicken Salad">
-            </div>
-            <div class="form-group">
-              <label>Calories</label>
-              <input type="number" class="form-control" [(ngModel)]="mealForm.calories" name="calories">
-            </div>
-            <div class="form-group">
-              <label>Proteins (g)</label>
-              <input type="number" class="form-control" [(ngModel)]="mealForm.proteins" name="proteins">
-            </div>
-            <div class="form-group">
-              <label>Carbs (g)</label>
-              <input type="number" class="form-control" [(ngModel)]="mealForm.carbs" name="carbs">
-            </div>
-            <div class="form-group">
-              <label>Fats (g)</label>
-              <input type="number" class="form-control" [(ngModel)]="mealForm.fats" name="fats">
-            </div>
-            <div class="form-group">
-              <label>Diet Preference</label>
-              <select class="form-control" [(ngModel)]="mealForm.dietPreference" name="dietPref">
-                <option value="VEG">Veg</option>
-                <option value="NON_VEG">Non-Veg</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Goal</label>
-              <select class="form-control" [(ngModel)]="mealForm.goal" name="mealGoal">
-                <option value="OVERALL_HEALTH">Overall Health</option>
-                <option value="MUSCULAR_STRENGTH">Muscular Strength</option>
-                <option value="WEIGHT_LOSS">Weight Loss</option>
-                <option value="DIABETIC_BP_CONTROL">Diabetic/BP Control</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Day Number</label>
-              <input type="number" class="form-control" [(ngModel)]="mealForm.dayNumber" name="dayNum">
-            </div>
-          </div>
-          <button class="btn btn-success btn-sm" (click)="saveMeal()">
-            <span class="material-icons">save</span> Save
-          </button>
+
+            <button class="btn btn-success btn-sm"
+                    [disabled]="mealFormRef.invalid"
+                    (click)="saveMeal()">
+              <span class="material-icons">save</span> Save
+            </button>
+          </form>
         </div>
 
         <div class="table-wrapper">
@@ -143,10 +162,10 @@ import { ApiService } from '../../core/services/api.service';
                 <td>{{ formatGoal(m.goal) }}</td>
                 <td>{{ m.dayNumber }}</td>
                 <td>
-                  <button class="btn-icon edit" (click)="editMeal(m)" title="Edit">
+                  <button class="btn-icon edit" (click)="editMeal(m)">
                     <span class="material-icons">edit</span>
                   </button>
-                  <button class="btn-icon delete" (click)="deleteMeal(m.id)" title="Delete">
+                  <button class="btn-icon delete" (click)="deleteMeal(m.id)">
                     <span class="material-icons">delete</span>
                   </button>
                 </td>
@@ -156,55 +175,72 @@ import { ApiService } from '../../core/services/api.service';
         </div>
       </div>
 
-      <!-- Workouts Tab -->
+      <!-- WORKOUTS -->
       <div *ngIf="activeTab === 'workouts'" class="tab-content">
-        <button class="btn btn-primary btn-sm" (click)="showWorkoutForm = !showWorkoutForm" style="margin-bottom: 20px">
+        <button class="btn btn-primary btn-sm" (click)="toggleWorkoutForm()">
           <span class="material-icons">add</span> {{ showWorkoutForm ? 'Cancel' : 'Add Workout' }}
         </button>
 
         <div class="form-card card" *ngIf="showWorkoutForm">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Exercise Name</label>
-              <input class="form-control" [(ngModel)]="workoutForm.exerciseName" name="exName" placeholder="e.g. Push-ups">
+          <form #workoutFormRef="ngForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Exercise Name</label>
+                <input class="form-control" [(ngModel)]="workoutForm.exerciseName"
+                       name="exerciseName" required pattern="^[a-zA-Z0-9 ]+$">
+              </div>
+
+              <div class="form-group">
+                <label>Reps</label>
+                <input class="form-control" [(ngModel)]="workoutForm.reps"
+                       name="reps" required pattern="^[0-9xX ]+$">
+              </div>
+
+              <div class="form-group">
+                <label>Sets</label>
+                <input type="number" class="form-control" [(ngModel)]="workoutForm.sets"
+                       name="sets" required min="1">
+              </div>
+
+              <div class="form-group">
+                <label>Category</label>
+                <input class="form-control" [(ngModel)]="workoutForm.category"
+                       name="category" required>
+              </div>
+
+              <div class="form-group">
+                <label>Workout Level</label>
+                <select class="form-control" [(ngModel)]="workoutForm.workoutLevel"
+                        name="workoutLevel" required>
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="HARD">Hard</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Goal</label>
+                <select class="form-control" [(ngModel)]="workoutForm.goal" name="goal" required>
+                  <option value="OVERALL_HEALTH">Overall Health</option>
+                  <option value="MUSCULAR_STRENGTH">Muscular Strength</option>
+                  <option value="WEIGHT_LOSS">Weight Loss</option>
+                  <option value="DIABETIC_BP_CONTROL">Diabetic/BP Control</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Day Number</label>
+                <input type="number" class="form-control" [(ngModel)]="workoutForm.dayNumber"
+                       name="dayNumber" required min="1">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Reps</label>
-              <input class="form-control" [(ngModel)]="workoutForm.reps" name="reps" placeholder="e.g. 15">
-            </div>
-            <div class="form-group">
-              <label>Sets</label>
-              <input type="number" class="form-control" [(ngModel)]="workoutForm.sets" name="sets">
-            </div>
-            <div class="form-group">
-              <label>Category</label>
-              <input class="form-control" [(ngModel)]="workoutForm.category" name="cat" placeholder="e.g. Upper Body">
-            </div>
-            <div class="form-group">
-              <label>Workout Level</label>
-              <select class="form-control" [(ngModel)]="workoutForm.workoutLevel" name="wLevel">
-                <option value="BEGINNER">Beginner</option>
-                <option value="INTERMEDIATE">Intermediate</option>
-                <option value="HARD">Hard</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Goal</label>
-              <select class="form-control" [(ngModel)]="workoutForm.goal" name="wGoal">
-                <option value="OVERALL_HEALTH">Overall Health</option>
-                <option value="MUSCULAR_STRENGTH">Muscular Strength</option>
-                <option value="WEIGHT_LOSS">Weight Loss</option>
-                <option value="DIABETIC_BP_CONTROL">Diabetic/BP Control</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Day Number</label>
-              <input type="number" class="form-control" [(ngModel)]="workoutForm.dayNumber" name="wDay">
-            </div>
-          </div>
-          <button class="btn btn-success btn-sm" (click)="saveWorkout()">
-            <span class="material-icons">save</span> Save
-          </button>
+
+            <button class="btn btn-success btn-sm"
+                    [disabled]="workoutFormRef.invalid"
+                    (click)="saveWorkout()">
+              <span class="material-icons">save</span> Save
+            </button>
+          </form>
         </div>
 
         <div class="table-wrapper">
@@ -231,10 +267,10 @@ import { ApiService } from '../../core/services/api.service';
                 <td>{{ formatGoal(w.goal) }}</td>
                 <td>{{ w.dayNumber }}</td>
                 <td>
-                  <button class="btn-icon edit" (click)="editWorkout(w)" title="Edit">
+                  <button class="btn-icon edit" (click)="editWorkout(w)">
                     <span class="material-icons">edit</span>
                   </button>
-                  <button class="btn-icon delete" (click)="deleteWorkout(w.id)" title="Delete">
+                  <button class="btn-icon delete" (click)="deleteWorkout(w.id)">
                     <span class="material-icons">delete</span>
                   </button>
                 </td>
@@ -332,6 +368,7 @@ import { ApiService } from '../../core/services/api.service';
       .admin-tabs { flex-wrap: wrap; }
     }
   `]
+
 })
 export class AdminComponent implements OnInit {
   activeTab = 'users';
@@ -341,8 +378,8 @@ export class AdminComponent implements OnInit {
   showMealForm = false;
   showWorkoutForm = false;
 
-  mealForm: any = { mealType: 'BREAKFAST', foodItem: '', calories: 0, proteins: 0, carbs: 0, fats: 0, dietPreference: 'VEG', goal: 'OVERALL_HEALTH', dayNumber: 1 };
-  workoutForm: any = { exerciseName: '', reps: '', sets: 3, category: '', workoutLevel: 'BEGINNER', goal: 'OVERALL_HEALTH', dayNumber: 1 };
+  mealForm = { mealType: 'BREAKFAST', foodItem: '', calories: 1, proteins: 0, carbs: 0, fats: 0, dietPreference: 'VEG', goal: 'OVERALL_HEALTH', dayNumber: 1 };
+  workoutForm = { exerciseName: '', reps: '', sets: 1, category: '', workoutLevel: 'BEGINNER', goal: 'OVERALL_HEALTH', dayNumber: 1 };
 
   constructor(private api: ApiService) {}
 
@@ -353,11 +390,13 @@ export class AdminComponent implements OnInit {
   loadMeals() { this.api.getMealPlans().subscribe(res => this.meals = res); }
   loadWorkouts() { this.api.getWorkoutPlans().subscribe(res => this.workouts = res); }
 
+  toggleMealForm() { this.showMealForm = !this.showMealForm; }
+  toggleWorkoutForm() { this.showWorkoutForm = !this.showWorkoutForm; }
+
   saveMeal() {
     this.api.saveMealPlan(this.mealForm).subscribe(() => {
       this.loadMeals();
       this.showMealForm = false;
-      this.mealForm = { mealType: 'BREAKFAST', foodItem: '', calories: 0, proteins: 0, carbs: 0, fats: 0, dietPreference: 'VEG', goal: 'OVERALL_HEALTH', dayNumber: 1 };
     });
   }
 
@@ -376,7 +415,6 @@ export class AdminComponent implements OnInit {
     this.api.saveWorkoutPlan(this.workoutForm).subscribe(() => {
       this.loadWorkouts();
       this.showWorkoutForm = false;
-      this.workoutForm = { exerciseName: '', reps: '', sets: 3, category: '', workoutLevel: 'BEGINNER', goal: 'OVERALL_HEALTH', dayNumber: 1 };
     });
   }
 
