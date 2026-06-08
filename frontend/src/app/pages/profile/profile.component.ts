@@ -90,11 +90,11 @@ import { ApiService } from '../../core/services/api.service';
                        (blur)="validatePhone()" minlength="2" maxlength="100">
               </div>
               <div class="form-group" [class.has-error]="phoneErr">
-                <label>Phone Number <span class="label-hint">10–15 digits only</span></label>
+                <label>Phone Number <span class="label-hint">10 digits only</span></label>
                 <div class="field-wrap">
                   <input class="form-control" [(ngModel)]="profile.phone" name="phone"
                          (blur)="validatePhone()" (input)="phoneErr = ''"
-                         maxlength="15" placeholder="9876543210">
+                         maxlength="10" placeholder="9876543210">
                   <span class="field-icon error-icon material-icons" *ngIf="phoneErr">error</span>
                 </div>
                 <div class="field-error-msg" *ngIf="phoneErr">{{ phoneErr }}</div>
@@ -495,8 +495,8 @@ export class ProfileComponent implements OnInit {
 
   validatePhone() {
     this.phoneErr = '';
-    if (this.profile.phone && !/^\d{10,15}$/.test(this.profile.phone)) {
-      this.phoneErr = 'Enter 10–15 digits only (no spaces or symbols)';
+    if (this.profile.phone && !/^\d{10}$/.test(this.profile.phone)) {
+      this.phoneErr = 'Enter 10 digits only (no spaces or symbols)';
     }
   }
 
