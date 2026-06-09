@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private apiUrl = 'http://localhost:1010/api';
+  private apiUrl = 'https://diet-and-fitness-planner.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
