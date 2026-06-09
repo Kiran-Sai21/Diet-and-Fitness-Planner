@@ -1,0 +1,9 @@
+target/
+.mvn/
+.git/
+.gitignore
+node_modules/
+frontend/
+*.log
+*.md
+Dockerfile
